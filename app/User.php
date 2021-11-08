@@ -51,7 +51,7 @@ class User extends Authenticatable
     }
 
     public function ban(){
-        return $this->hasMany(ban::class,'user','id');
+        return $this->hasMany(ban::class,'ban','id');
     }
 
 
