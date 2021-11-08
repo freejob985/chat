@@ -1238,4 +1238,20 @@ class userControllerApi extends Controller
     }
     return response()->json(['status' => 'success', 'data' => $ban], 200);
   }
+
+
+
+  public function available($id)
+  {
+    $room = rooms::find($id);
+    if ($room->allowedUsers == 'limit' && $room->get_available_users->count() >= $this->UsersInRoom) {
+      return response()->json(['success' => 'failed', 'reason' => 'full'], 200);
+    }else{
+      return response()->json(['success' => 'success', 'reason' => 'available'], 200);
+    }
+
+  }
+
+
+
 }
