@@ -97,6 +97,11 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('room/available/{id}','userControllerApi@available')->name($prefix.'.'.'room.available');//done
 
 
+    Route::get('clear/inbox','userControllerApi@clear')->name($prefix.'.'.'clear.inbox');//done
+
+
+
+
     /*
     |--------------------------------------------------------------------------
     | er web
