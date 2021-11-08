@@ -1256,7 +1256,7 @@ class userControllerApi extends Controller
   public function clear()
   {
     $user = Auth::id();
-    DB::table('messages')->where('user_id', '=', $id)->delete();
+    DB::table('messages')->where('user_id', '=', $user)->delete();
     return response()->json(['status' => 'success', 'data' => null], 200);
   }
 
