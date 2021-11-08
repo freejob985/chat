@@ -1225,7 +1225,7 @@ class userControllerApi extends Controller
   {
     $user = Auth::id();
     $User = ban::where('user', $user)->get();
-    dd($User);
+
 
     foreach ($User as $item) {
       $code = $item->ban;
