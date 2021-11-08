@@ -50,6 +50,12 @@ class User extends Authenticatable
         return $this->hasMany(story::class,'user','id');
     }
 
+    public function ban(){
+        return $this->hasMany(ban::class,'user','id');
+    }
+
+
+
     public function AauthAcessToken(){
     return $this->hasMany('\App\OauthAccessToken');
 }
