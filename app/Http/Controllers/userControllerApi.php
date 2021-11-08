@@ -18,6 +18,7 @@ use App\plans;
 use App\payments;
 use App\banners;
 use App\User;
+use App\ban;
 use App\roomsowners;
 use App\rooms_ban;
 use App\available_users;
@@ -1226,7 +1227,7 @@ class userControllerApi extends Controller
   public function get_banuser()
   {
     $user = Auth::id();
-    $User = User::with('ban')->where('user', $user)->pluck('ban');
+    $User = ban::with('ban')->where('user', $user)->pluck('ban');
     return response()->json(['status' => 'success', 'data' => $User], 200);
   }
   
