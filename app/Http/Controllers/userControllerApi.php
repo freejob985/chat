@@ -237,7 +237,9 @@ class userControllerApi extends Controller
         $messages = $availableRoom->messages->where('created_at', '>=', Carbon::now()->subHours(6));
 
         collect($messages)->map(function ($item) {
-          $item['username'] = User::find($item->user_id)->name;
+          $item['username'] = User::where('id', $item->user_id)->get();
+
+          
           $item['userimage'] = url('images/profiles/') . '/' . User::find($item->user_id)->image;
           if ($item->type != 'text') {
             $item['body'] = url('uploads/') . '/' . $item->body;
