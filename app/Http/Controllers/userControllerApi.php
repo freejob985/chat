@@ -1221,16 +1221,21 @@ class userControllerApi extends Controller
     return response()->json(['status' => 'success', 'data' => $User], 200);
   }
 
+
+  public function getname($id)
+  {
+   return $users= DB::table('users')->find($id)->name;
+  }
   public function get_banuser()
   {
     $user = Auth::id();
     $User = ban::where('user', $user)->get();
-
+    $ban = array();
 
     foreach ($User as $item) {
       $code = $item->ban;
-      dd($code);
+      $ban[]=$this->getname($item->ban);
     }
-    return response()->json(['status' => 'success', 'data' => $User], 200);
+    return response()->json(['status' => 'success', 'data' => $ban], 200);
   }
 }
