@@ -40,11 +40,11 @@ class userControllerApi extends Controller
 {
 
   protected $UsersInRoom = 1;
-//   public function __constructor()
-//   {
-//     // \Auth::shouldUse('api');
-//     $this->middleware('auth:api')->except('abbreviation_get');
-//   }
+  //   public function __constructor()
+  //   {
+  //     // \Auth::shouldUse('api');
+  //     $this->middleware('auth:api')->except('abbreviation_get');
+  //   }
 
   public function badwords()
   {
@@ -71,9 +71,9 @@ class userControllerApi extends Controller
     $user->name = $request->name;
     $user->verified = 1;
     if ($request->gender == 1) {
-        $avatar = 'boy.png';
+      $avatar = 'boy.png';
     } else {
-        $avatar = 'girl.png';
+      $avatar = 'girl.png';
     }
     $user->image = $avatar;
     $user->gender = $request->gender;
@@ -503,21 +503,21 @@ class userControllerApi extends Controller
     $active_chats = privateChat::where("parent_id", auth()->id())->where("hide_chat", 0)->get();
 
     //?hide all chats
-    if(count($active_chats) > 0){
-        $active_chats->each(function($chat){
-            $chat->update([
-                'hide_chat' => 1,
-            ]);
-        });
+    if (count($active_chats) > 0) {
+      $active_chats->each(function ($chat) {
+        $chat->update([
+          'hide_chat' => 1,
+        ]);
+      });
     }
 
     //?toggle chats back on if all chats are hidden
-    else{
-        privateChat::where("parent_id", auth()->id())->where("hide_chat", 1)->each(function($chat){
-            $chat->update([
-                'hide_chat' => 0,
-            ]);
-        });
+    else {
+      privateChat::where("parent_id", auth()->id())->where("hide_chat", 1)->each(function ($chat) {
+        $chat->update([
+          'hide_chat' => 0,
+        ]);
+      });
     }
 
     return response()->json(['success' => 'done', 'data' => null], 200);
@@ -527,10 +527,10 @@ class userControllerApi extends Controller
   {
     $getPrivateChats = privateChat::where(function ($query) {
       $query->where("parent_id", Auth::id())
-      ->where("hide_chat", 0);
+        ->where("hide_chat", 0);
     })->orWhere(function ($query) {
       $query->where("child_id", Auth::id())
-      ->where("hide_chat", 0);
+        ->where("hide_chat", 0);
     })->get();
     $privateNotify = [];
     foreach ($getPrivateChats as $getprivate) {
@@ -1049,9 +1049,9 @@ class userControllerApi extends Controller
     }
 
     $story = Story::create([
-        'file' => $url,
-        'user' => auth()->id(),
-        'filetype' => $filetype,
+      'file' => $url,
+      'user' => auth()->id(),
+      'filetype' => $filetype,
     ]);
 
     return response()->json(['status' => 'success', 'data' => $story], 200);
@@ -1103,22 +1103,20 @@ class userControllerApi extends Controller
   public function storySeen(Request $request, story $story)
   {
     //?if story user is currently authenticated user:
-    if($story->user == auth()->id()){
+    if ($story->user == auth()->id()) {
+      return response()->json(['status' => 'Unavailable', 'data' => null], 200);
+    } else {
+      //if user has already seen this story:
+      if (StoryUser::where("user_id", auth()->id())->where("story_id", $story->id)->first()) {
         return response()->json(['status' => 'Unavailable', 'data' => null], 200);
-    }
-    else{
-        //if user has already seen this story:
-        if(StoryUser::where("user_id", auth()->id())->where("story_id", $story->id)->first()){
-            return response()->json(['status' => 'Unavailable', 'data' => null], 200);
-        }
-        else{
-            StoryUser::create([
-                "user_id" => auth()->id(),
-                "story_id" => $story->id,
-            ]);
+      } else {
+        StoryUser::create([
+          "user_id" => auth()->id(),
+          "story_id" => $story->id,
+        ]);
 
-            return response()->json(['status' => 'success', 'data' => null], 200);
-        }
+        return response()->json(['status' => 'success', 'data' => null], 200);
+      }
     }
   }
 
@@ -1126,13 +1124,12 @@ class userControllerApi extends Controller
   {
     $story_users = StoryUser::where("story_id", $story->id)->get();
     $users_temp = [];
-    foreach($story_users as $story_user){
-        $users_temp[] = $story_user->user;
+    foreach ($story_users as $story_user) {
+      $users_temp[] = $story_user->user;
     }
     $story->users = $users_temp;
     $story->views = count($story_users);
     return response()->json(['status' => 'success', 'data' => $story], 200);
-
   }
 
   public function abbreviation(Request $request)
@@ -1228,7 +1225,12 @@ class userControllerApi extends Controller
   {
     $user = Auth::id();
     $User = ban::with('users')->where('user', $user)->pluck('ban');
+
+
+    foreach ($User as $item) {
+      $code = $item->ban;
+      dd($code);
+    }
     return response()->json(['status' => 'success', 'data' => $User], 200);
   }
-  
 }
