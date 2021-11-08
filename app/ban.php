@@ -15,6 +15,6 @@ class ban extends Model
 
 
     public function users(){
-        return $this->belongsToMany(User::class, "user");
+        return $this->belongsToMany(User::class, "ban");
     }
 }
