@@ -236,6 +236,7 @@ class userControllerApi extends Controller
       if ($availableRoom != null) {
         $messages = $availableRoom->messages->where('created_at', '>=', Carbon::now()->subHours(6));
 
+        
         collect($messages)->map(function ($item) {
           $item['user'] = User::where('id', $item->user_id)->get();
 
@@ -246,7 +247,6 @@ class userControllerApi extends Controller
           }
           return $item;
         });
-        dd($messages);
 
         return response()->json(['room_id' => $availableRoom->id, 'messages' => collect($messages)->values()], 200);
       }
